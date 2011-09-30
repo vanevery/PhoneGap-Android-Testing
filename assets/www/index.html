@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>PhoneGap</title>
+		<script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+		<script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
+		<script type="text/javascript" charset="utf-8" src="PluginTesting.js"></script>
+
+		<script type="text/javascript">
+		
+			function onBodyLoad()
+			{		
+				console.log("onBodyLoad");
+    			document.addEventListener("deviceready",onDeviceReady,false);
+			}
+			
+			function onDeviceReady()
+			{
+				console.log("onDeviceReady");
+    			var thebutton = document.getElementById("buttonid");
+				thebutton.onclick = function() {
+					console.log("thebutton.onclick");
+					window.plugins.PluginTesting.doIt("something",pluginTestingSuccess,pluginTestingError);
+				}
+				
+				navigator.accelerometer.getCurrentAcceleration(onAccelSuccess, onAccelError);
+			}
+
+			function pluginTestingSuccess(message) {
+				// message is a JSONObject, result is it's key
+				console.log("pluginTestingSuccess " + message.result);
+			}
+			
+			function pluginTestingError(message) {
+				console.log("pluginTestingError " + message);
+			}
+
+			function onAccelSuccess(acceleration) {
+				console.log("onAccelSuccess");
+        		alert('Acceleration X: ' + acceleration.x + '\n' +
+              		'Acceleration Y: ' + acceleration.y + '\n' +
+              		'Acceleration Z: ' + acceleration.z + '\n' +
+              		'Timestamp: '      + acceleration.timestamp + '\n');
+    		}
+
+    		function onAccelError() {
+    			console.log("onAccelError");
+        		alert('onAccelError!');
+    		}
+
+			function doIt() {
+   				console.log("doIt JavaScript Function in index.html");
+    			window.plugins.pluginTesting.doIt("somedata",
+    							function(r){console.log(r)},
+    							function(e){console.log(e)});
+			}
+
+		</script>
+	</head>
+	<body onload="onBodyLoad()">
+		<h1>Hello World</h1>
+		<input id="buttonid" type="button" name="abutton" value="abutton" />
+	</body>
+</html>
